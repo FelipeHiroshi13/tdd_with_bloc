@@ -4,7 +4,7 @@ import 'package:dummy_app_with_bloc/src/features/authentication/domain/usecases/
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockAuthRepo extends Mock implements IAuthenticationRepository {}
+import 'authentication_repository.mock.dart';
 
 void main() {
   late CreateUser usecase;
