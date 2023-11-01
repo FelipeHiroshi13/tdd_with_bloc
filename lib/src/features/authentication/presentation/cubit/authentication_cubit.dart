@@ -11,7 +11,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   AuthenticationCubit({
     required this.createUserUseCase,
     required this.getUsersUseCase,
-  }) : super(AuthenticationInitial());
+  }) : super(const AuthenticationInitial());
 
   final CreateUser createUserUseCase;
   final GetUsers getUsersUseCase;
