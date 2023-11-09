@@ -21,7 +21,9 @@ void main() {
     getUsers = MockGetUser();
     createUser = MockCreateUser();
     cubit = AuthenticationCubit(
-        createUserUseCase: createUser, getUsersUseCase: getUsers);
+      createUserUseCase: createUser,
+      getUsersUseCase: getUsers,
+    );
     registerFallbackValue(tCreateUserParams);
   });
 
