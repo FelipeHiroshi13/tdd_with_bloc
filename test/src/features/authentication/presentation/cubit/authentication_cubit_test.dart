@@ -35,23 +35,25 @@ void main() {
 
   group('Create user', () {
     blocTest<AuthenticationCubit, AuthenticationState>(
-        'should emit [CreatingUser, UserCreated] when sucessful',
-        build: () {
-          when(() => createUser(any()))
-              .thenAnswer((_) async => const Right(null));
-          return cubit;
-        },
-        act: (cubit) => cubit.createUser(
-              name: tCreateUserParams.name,
-              avatar: tCreateUserParams.avatar,
-            ),
-        expect: () => const [
-              CreatingUser(),
-              UserCreated(),
-            ],
-        verify: (_) {
-          verify(() => createUser(tCreateUserParams)).called(1);
-          verifyNoMoreInteractions(createUser);
-        });
+      'should emit [CreatingUser, UserCreated] when sucessful',
+      build: () {
+        when(() => createUser(any())).thenAnswer(
+          (_) async => const Right(null),
+        );
+        return cubit;
+      },
+      act: (cubit) => cubit.createUser(
+        name: tCreateUserParams.name,
+        avatar: tCreateUserParams.avatar,
+      ),
+      expect: () => const [
+        CreatingUser(),
+        UserCreated(),
+      ],
+      verify: (_) {
+        verify(() => createUser(tCreateUserParams)).called(1);
+        verifyNoMoreInteractions(createUser);
+      },
+    );
   });
 }
