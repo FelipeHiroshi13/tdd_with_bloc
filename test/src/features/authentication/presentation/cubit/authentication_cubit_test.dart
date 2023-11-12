@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
+import 'package:dummy_app_with_bloc/src/core/errors/failure.dart';
 import 'package:dummy_app_with_bloc/src/features/authentication/domain/usecases/create_user.dart';
 import 'package:dummy_app_with_bloc/src/features/authentication/domain/usecases/get_users.dart';
 import 'package:dummy_app_with_bloc/src/features/authentication/presentation/cubit/authentication_cubit.dart';
@@ -16,6 +17,7 @@ void main() {
   late AuthenticationCubit cubit;
 
   const tCreateUserParams = CreateUserParams(avatar: 'avatar', name: 'name');
+  const tApiFailure = APIFailure(message: 'message', statusCode: 400);
 
   setUp(() {
     getUsers = MockGetUser();
@@ -49,6 +51,27 @@ void main() {
       expect: () => const [
         CreatingUser(),
         UserCreated(),
+      ],
+      verify: (_) {
+        verify(() => createUser(tCreateUserParams)).called(1);
+        verifyNoMoreInteractions(createUser);
+      },
+    );
+
+    blocTest<AuthenticationCubit, AuthenticationState>(
+      'should emit [Creating User, AuthenticationError] when unsucessful',
+      build: () {
+        when(() => createUser(any()))
+            .thenAnswer((_) async => const Left(tApiFailure));
+        return cubit;
+      },
+      act: (cubit) => cubit.createUser(
+        avatar: tCreateUserParams.avatar,
+        name: tCreateUserParams.name,
+      ),
+      expect: () => [
+        const CreatingUser(),
+        AuthenticationError(tApiFailure.errorMessage),
       ],
       verify: (_) {
         verify(() => createUser(tCreateUserParams)).called(1);
