@@ -79,4 +79,40 @@ void main() {
       },
     );
   });
+
+  group('getUsers', () {
+    blocTest<AuthenticationCubit, AuthenticationState>(
+      'Should emit [GettingUers, UsersLoaded] when sucessful',
+      build: () {
+        when(() => getUsers()).thenAnswer((_) async => const Right([]));
+        return cubit;
+      },
+      act: (cubit) => cubit.getUsers(),
+      expect: () => [
+        const GettingUsers(),
+        const UsersLoaded([]),
+      ],
+      verify: (_) {
+        verify(() => getUsers()).called(1);
+        verifyNoMoreInteractions(getUsers);
+      },
+    );
+
+    blocTest<AuthenticationCubit, AuthenticationState>(
+      'Should emit [GettingUers, AuthenticationError] when unsucessful',
+      build: () {
+        when(() => getUsers()).thenAnswer((_) async => const Left(tApiFailure));
+        return cubit;
+      },
+      act: (cubit) => cubit.getUsers(),
+      expect: () => [
+        const GettingUsers(),
+        AuthenticationError(tApiFailure.errorMessage),
+      ],
+      verify: (_) {
+        verify(() => getUsers()).called(1);
+        verifyNoMoreInteractions(getUsers);
+      },
+    );
+  });
 }
