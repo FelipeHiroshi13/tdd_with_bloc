@@ -3,5 +3,5 @@ abstract class Endpoints {
 
   // * USERS
   static const createUser = 'test-api/users';
-  static const getUsersEndpoint = 'test-api/user';
+  static const getUsersEndpoint = 'test-api/users';
 }

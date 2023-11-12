@@ -6,6 +6,8 @@ import 'package:dummy_app_with_bloc/src/features/authentication/presentation/cub
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 
+import '../../features/authentication/domain/repositories/i_authentication_repository.dart';
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -19,10 +21,36 @@ Future<void> init() async {
     ..registerLazySingleton(() => GetUsers(repository: sl()))
 
     // Repositories
-    ..registerLazySingleton(
+    ..registerLazySingleton<IAuthenticationRepository>(
         () => AuthenticationRepository(remoteDataSource: sl()))
 
     // Data Sources
-    ..registerLazySingleton(() => AuthenticationRemoteDataSource(client: sl()))
-    ..registerLazySingleton(() => http.Client.new);
+    ..registerLazySingleton<IAuthenticationRemoteDataSource>(
+        () => AuthenticationRemoteDataSource(client: sl()))
+    ..registerLazySingleton(() => http.Client());
 }
+
+
+// Future<void> init() async {
+//   sl
+//     // App Logic
+//     ..registerFactory(() => AuthenticationCubit(
+//           createUser: sl(),
+//           getUsers: sl(),
+//         ))
+
+//     // Use cases
+//     ..registerLazySingleton(() => CreateUser(sl()))
+//     ..registerLazySingleton(() => GetUsers(sl()))
+
+//     // Repositories
+//     ..registerLazySingleton<AuthenticationRepository>(
+//         () => AuthenticationRepositoryImplementation(sl()))
+
+//     // Data Sources
+//     ..registerLazySingleton<AuthenticationRemoteDataSource>(
+//         () => AuthRemoteDataSrcImpl(sl()))
+
+//     // External Dependencies
+//     ..registerLazySingleton(http.Client.new);
+// }
