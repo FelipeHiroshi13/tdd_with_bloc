@@ -14,6 +14,5 @@ class User extends Equatable {
   final String avatar;
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, name, createdAt, avatar];
 }
